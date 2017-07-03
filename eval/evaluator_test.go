@@ -7,12 +7,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/fpm"
-	"github.com/Timzzz/hora/mondat"
+	"../adm"
+	"../cfp"
+	"../fpm"
+	"../mondat"
 
-	"github.com/Timzzz/hora/rbridge"
+	"../rbridge"
 	"github.com/spf13/viper"
 	"gopkg.in/ory-am/dockertest.v3"
 )

@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	//"github.com/Timzzz/hora/adm"
-	//"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/rbridge"
+	//"../adm"
+	//"../cfp"
+	"../rbridge"
 
 	"github.com/spf13/viper"
 	"gopkg.in/ory-am/dockertest.v3"

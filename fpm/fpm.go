@@ -3,8 +3,8 @@ package fpm
 import (
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/cfp"
+	"../adm"
+	"../cfp"
 )
 
 type Fpm interface {

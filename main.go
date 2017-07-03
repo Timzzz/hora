@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/eval"
-	"github.com/Timzzz/hora/fpm"
-	"github.com/Timzzz/hora/mondat"
-	"github.com/Timzzz/hora/resultio"
+	"./adm"
+	"./cfp"
+	"./eval"
+	"./fpm"
+	"./mondat"
+	"./resultio"
 
 	"github.com/spf13/viper"
 )

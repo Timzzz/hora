@@ -1,0 +1,32 @@
+	{
+	  
+	  "cpu_middletier_hnhvx_cpu_usage": {
+	  	"caller": {
+	  	  "name": "cpu_usage",
+	  	  "hostname": "middletier-hnhvx",
+		  "type": "cpu",
+		  "called": 50
+	  	},
+	  	"dependencies": {
+		  	"cpu_cpu_stress_5dl52_cpu_usage": {
+		    "callee": {
+				"name": "cpu_usage",
+		  	    "hostname": "cpu-stress-5dl52",
+				"type": "cpu",
+				"called": 50
+		    },
+		    "weight": 1,
+		    "called": 60
+	  	}
+	  	}
+	  },
+	  "cpu_cpu_stress_5dl52_cpu_usage": {
+	  	"caller": {
+	  	  "name": "cpu_usage",
+	  	  "hostname": "cpu-stress-5dl52",
+		  "type": "cpu",
+		  "called": 50
+	  	},
+	  	"dependencies": { }
+	  }
+	}

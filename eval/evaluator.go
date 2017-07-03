@@ -9,11 +9,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/fpm"
-	"github.com/Timzzz/hora/mondat"
-	"github.com/Timzzz/hora/rbridge"
+	"../adm"
+	"../cfp"
+	"../fpm"
+	"../mondat"
+	"../rbridge"
 
 	"github.com/spf13/viper"
 )

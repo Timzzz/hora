@@ -3,8 +3,8 @@ package resultio
 import (
 	"log"
 
-	"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/fpm"
+	"../cfp"
+	"../fpm"
 
 	"github.com/influxdata/influxdb/client/v2"
 	//"github.com/spf13/viper"

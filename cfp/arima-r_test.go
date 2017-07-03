@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"gopkg.in/ory-am/dockertest.v3"
 
-	"github.com/Timzzz/hora/rbridge"
+	"../rbridge"
 )
 
 var epsilon = 1e-12

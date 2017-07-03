@@ -10,9 +10,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/cfp"
-	"github.com/Timzzz/hora/rbridge"
+	"../adm"
+	"../cfp"
+	"../rbridge"
 
 	"github.com/senseyeio/roger"
 )

@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
+	"../adm"
 
 	"github.com/influxdata/influxdb/client/v2"
 	"github.com/spf13/viper"

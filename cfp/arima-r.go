@@ -7,9 +7,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/Timzzz/hora/adm"
-	"github.com/Timzzz/hora/mondat"
-	"github.com/Timzzz/hora/rbridge"
+	"../adm"
+	"../mondat"
+	"../rbridge"
 
 	"github.com/chobie/go-gaussian"
 	"github.com/senseyeio/roger"
