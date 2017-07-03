@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hora-prediction/hora/adm"
-	"github.com/hora-prediction/hora/mondat"
+	"github.com/Timzzz/hora/adm"
+	"github.com/Timzzz/hora/mondat"
 )
 
 func CreateLinearTSPoints(t *testing.T) (adm.Component, []mondat.TSPoint) {

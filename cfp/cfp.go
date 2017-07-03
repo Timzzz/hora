@@ -4,8 +4,8 @@ import (
 	"log"
 	"time"
 
-	"github.com/hora-prediction/hora/adm"
-	"github.com/hora-prediction/hora/mondat"
+	"github.com/Timzzz/hora/adm"
+	"github.com/Timzzz/hora/mondat"
 
 	"github.com/spf13/viper"
 )

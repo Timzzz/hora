@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hora-prediction/hora/adm"
-	"github.com/hora-prediction/hora/cfp"
-	"github.com/hora-prediction/hora/fpm"
+	"github.com/Timzzz/hora/adm"
+	"github.com/Timzzz/hora/cfp"
+	"github.com/Timzzz/hora/fpm"
 
 	"github.com/influxdata/influxdb/client/v2"
 	"github.com/spf13/viper"
