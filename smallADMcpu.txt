@@ -8,12 +8,12 @@
 		  "called": 50
 	  	},
 	  	"dependencies": {
-		  	"cpu_cpu_stress_5dl52_cpu_usage": {
+		  	"nodecpu_10_0_11_64_cpu_nodeusage": {
 		    "callee": {
-				"name": "cpu_usage",
-		  	    "hostname": "cpu-stress-5dl52",
-				"type": "cpu",
-				"called": 50
+				"name": "cpu_nodeusage",
+	  	        "hostname": "10.0.11.64",
+		        "type": "nodecpu",
+		        "called": 50
 		    },
 		    "weight": 1,
 		    "called": 60
@@ -25,6 +25,15 @@
 	  	  "name": "cpu_usage",
 	  	  "hostname": "cpu-stress-5dl52",
 		  "type": "cpu",
+		  "called": 50
+	  	},
+	  	"dependencies": { }
+	  },
+	  "nodecpu_10_0_11_64_cpu_nodeusage": {
+	  	"caller": {
+	  	  "name": "cpu_nodeusage",
+	  	  "hostname": "10.0.11.64",
+		  "type": "nodecpu",
 		  "called": 50
 	  	},
 	  	"dependencies": { }

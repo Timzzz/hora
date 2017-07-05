@@ -221,6 +221,49 @@ MainLoop:
 						mondatCh <- point
 					}
 				}
+			case "nodecpu":
+				aggregation := viper.GetString("cfp.cpu.aggregation")
+				aggregationvalue := viper.GetString("cfp.cpu.aggregationvalue")
+				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/node_utilization\" WHERE \"hostname\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.UnixNano(), 10), strconv.FormatInt(curtime.Add(1*r.Interval).UnixNano(), 10))
+				q = client.Query{
+					Command:  cmd,
+					Database: r.K8sDb.DbName,
+				}
+				response, err = r.K8sDb.Clnt.Query(q)
+				if err != nil {
+					log.Printf("influxdb-kieker-reader: cannot query data with cmd=%s. %s", cmd, err)
+					break MainLoop
+				}
+				if response == nil {
+					log.Printf("influxdb-kieker-reader: nil response from InfluxDB. Terminating reading.")
+					break MainLoop
+				}
+				if response.Error() != nil {
+					log.Printf("influxdb-kieker-reader: bad response from InfluxDB. Terminating reading. %s", response.Error())
+					break MainLoop
+				}
+				res := response.Results
+
+				if len(res[0].Series) == 0 {
+					continue ComponentLoop // no data - try next component
+				}
+				// Parse time and response time
+				for _, row := range res[0].Series[0].Values {
+					t, err := time.Parse(time.RFC3339, row[0].(string))
+					if err != nil {
+						log.Printf("influxdb-kieker-reader: cannot parse result from InfluxDB. %s", err)
+					}
+
+					if row[1] != nil {
+						val, _ := row[1].(json.Number).Float64()
+						point := TSPoint{
+							Component: depInfo.Caller,
+							Timestamp: t,
+							Value:     val,
+						}
+						mondatCh <- point
+					}
+				}
 			case "memory":
 				aggregation := viper.GetString("cfp.memory.aggregation")
 				aggregationvalue := viper.GetString("cfp.memory.aggregationvalue")
