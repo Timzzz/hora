@@ -37,6 +37,12 @@ spec:
         env:
           - name: HORA_PREDICTION_LEADTIME
             value: "10m"
+          - name: HORA_PREDICTION_STARTTIME
+            value: "Wed, 05 Jul 2017 09:50:00 GMT"
+          - name: HORA_PREDICTION_ENDTIME
+            value: "Fri, 31 Mar 2017 11:00:00 GMT"
+          - name: HORA_PREDICTION_BATCH
+            value: "TRUE"
           - name: HORA_ADM_FILEWATCHER_ENABLED
             value: "FALSE"
           - name: HORA_ADM_RESTAPI_ENABLED
@@ -49,8 +55,6 @@ spec:
             value: "rserve"
           - name: HORA_RSERVE_PORT
             value: "6311"
-          - name: HORA_INFLUXDB_BATCH
-            value: "FALSE"
           - name: HORA_INFLUXDB_KIEKER_ADDR
             value: "http://influxdb:8086"
           - name: HORA_INFLUXDB_KIEKER_USERNAME
