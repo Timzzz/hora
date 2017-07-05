@@ -38,9 +38,9 @@ spec:
           - name: HORA_PREDICTION_LEADTIME
             value: "10m"
           - name: HORA_PREDICTION_STARTTIME
-            value: "Wed, 05 Jul 2017 09:50:00 GMT"
+            value: "Wed, 05 Jul 2017 10:00:00 GMT"
           - name: HORA_PREDICTION_ENDTIME
-            value: "Fri, 31 Mar 2017 11:00:00 GMT"
+            value: "Fri, 31 Mar 2017 10:35:00 GMT"
           - name: HORA_PREDICTION_BATCH
             value: "TRUE"
           - name: HORA_ADM_FILEWATCHER_ENABLED
