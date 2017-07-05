@@ -1,4 +1,4 @@
-FROM scratch
+FROM nginx
 
 ADD config.toml /config.toml
 ADD hora /hora

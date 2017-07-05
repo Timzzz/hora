@@ -318,6 +318,9 @@ func (e *Evaluator) ComputeROC() error {
 	if err != nil {
 		log.Printf("evaluator: cannot write to file. %s", err)
 	}
+	
+	for{time.Sleep(500)}
+	
 	// TODO: export metrics to text file
 	return nil
 }
