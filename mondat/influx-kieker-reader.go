@@ -225,11 +225,14 @@ MainLoop:
 				aggregation := viper.GetString("cfp.cpu.aggregation")
 				aggregationvalue := viper.GetString("cfp.cpu.aggregationvalue")
 				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/node_utilization\" WHERE \"hostname\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.UnixNano(), 10), strconv.FormatInt(curtime.Add(1*r.Interval).UnixNano(), 10))
+				log.Printf("Query: %s", cmd)
 				q = client.Query{
 					Command:  cmd,
 					Database: r.K8sDb.DbName,
 				}
+				log.Printf("DBName: %s", r.K8sDb.DbName)
 				response, err = r.K8sDb.Clnt.Query(q)
+				log.Printf("Response: %s", response)
 				if err != nil {
 					log.Printf("influxdb-kieker-reader: cannot query data with cmd=%s. %s", cmd, err)
 					break MainLoop
@@ -245,6 +248,7 @@ MainLoop:
 				res := response.Results
 
 				if len(res[0].Series) == 0 {
+				log.Printf("No data for nodecpu (host: %s)", depInfo.Caller.Hostname)
 					continue ComponentLoop // no data - try next component
 				}
 				// Parse time and response time

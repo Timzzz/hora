@@ -109,6 +109,13 @@ func (e *Evaluator) UpdateMondat(tsPoint mondat.TSPoint) {
 		} else {
 			componentResultPoint.Label = 0
 		}
+	case "nodecpu":
+		threshold := viper.GetFloat64("cfp.cpu.threshold")
+		if tsPoint.Value > threshold {
+			componentResultPoint.Label = 1
+		} else {
+			componentResultPoint.Label = 0
+		}
 	case "memory":
 		threshold := viper.GetFloat64("cfp.memory.threshold")
 		if tsPoint.Value > threshold {

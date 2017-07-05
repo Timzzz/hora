@@ -34,6 +34,7 @@ func NewArimaR(c adm.Component, interval time.Duration, leadtime time.Duration, 
 	a.buf = ring.New(buflen)
 	a.bufcount = 0
 	a.interval = interval
+	log.Printf("buflen: %d, interval: %d, history: %s", buflen, a.interval, history)
 	a.threshold = threshold
 	a.leadtime = leadtime
 	session, err := rbridge.GetRSession(a.component.UniqName())
@@ -89,6 +90,7 @@ func (a *ArimaR) TSPoints() mondat.TSPoints {
 }
 
 func (a *ArimaR) Predict() (Result, error) {
+	log.Print("arima: predicting ...")
 	result := Result{
 		a.component,
 		a.buf.Value.(mondat.TSPoint).Timestamp,
@@ -100,6 +102,7 @@ func (a *ArimaR) Predict() (Result, error) {
 		0,
 	}
 	if a.bufcount < a.buf.Len() {
+		log.Printf("arima: not enough data points (%d to %d).", a.bufcount, a.buf.Len)
 		return result, nil
 	}
 	// load data
@@ -159,5 +162,7 @@ func (a *ArimaR) Predict() (Result, error) {
 		sd,
 		failProb,
 	}
+	log.Print("arima: prediction: mean: %s, failprob: %s", result.PredMean, result.FailProb)
+	
 	return result, nil
 }

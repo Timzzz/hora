@@ -69,11 +69,13 @@ func (c *CfpController) start() {
 			select {
 			case tsPoint, ok := <-c.monCh:
 				if !ok {
+					log.Print("cfp: Break CfpController")
 					break Loop
 				}
 				comp := tsPoint.Component
 				cfp, ok := c.cfps[comp.UniqName()]
 				if !ok {
+					log.Print("cfp: predicting...")
 					var err error
 					// TODO: choose predictor based on component type
 					interval := viper.GetDuration("prediction.interval")
@@ -88,6 +90,14 @@ func (c *CfpController) start() {
 						}
 						c.cfps[comp.UniqName()] = cfp
 					case "cpu":
+						history := viper.GetDuration("cfp.cpu.history")
+						threshold := viper.GetFloat64("cfp.cpu.threshold")
+						cfp, err = NewArimaR(comp, interval, leadtime, history, threshold)
+						if err != nil {
+							log.Printf("cfp: %s. %s", comp.UniqName(), err)
+						}
+						c.cfps[comp.UniqName()] = cfp
+					case "nodecpu":
 						history := viper.GetDuration("cfp.cpu.history")
 						threshold := viper.GetFloat64("cfp.cpu.threshold")
 						cfp, err = NewArimaR(comp, interval, leadtime, history, threshold)
@@ -115,6 +125,8 @@ func (c *CfpController) start() {
 						log.Printf("cfp: unknown component type: %s. Skipping", comp.Type)
 						continue Loop
 					}
+				} else {
+					log.Print("cfp: not predicting.")
 				}
 				cfp.Insert(tsPoint)
 				res, err := cfp.Predict()
@@ -123,9 +135,11 @@ func (c *CfpController) start() {
 				}
 				c.cfpResultCh <- res
 			case model, _ := <-c.admCh:
+			log.Print("cfp: assigning model")
 				c.m = model
 			}
 		}
 		close(c.cfpResultCh)
+	log.Print("cfp: end.")
 	}()
 }
