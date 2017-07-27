@@ -16,6 +16,7 @@ type CfpController struct {
 	monCh       chan mondat.TSPoint
 	admCh       chan adm.ADM
 	cfpResultCh chan Result
+	lastNodeCpuPoint mondat.TSPoint
 }
 
 type Cfp interface {
@@ -62,10 +63,11 @@ func (c *CfpController) UpdateADM(m adm.ADM) {
 }
 
 func (c *CfpController) start() {
-	log.Print("Starting CfpController")
+	log.Print("A Starting CfpController")
 	go func() {
 	Loop:
 		for {
+			log.Print("Cfp select...")
 			select {
 			case tsPoint, ok := <-c.monCh:
 				if !ok {
@@ -75,7 +77,7 @@ func (c *CfpController) start() {
 				comp := tsPoint.Component
 				cfp, ok := c.cfps[comp.UniqName()]
 				if !ok {
-					log.Print("cfp: predicting...")
+					log.Printf("cfp: predicting - comp type: %s", comp.Type)
 					var err error
 					// TODO: choose predictor based on component type
 					interval := viper.GetDuration("prediction.interval")
@@ -98,9 +100,10 @@ func (c *CfpController) start() {
 						}
 						c.cfps[comp.UniqName()] = cfp
 					case "nodecpu":
-						history := viper.GetDuration("cfp.cpu.history")
-						threshold := viper.GetFloat64("cfp.cpu.threshold")
+						history := viper.GetDuration("cfp.nodecpu.history")
+						threshold := viper.GetFloat64("cfp.nodecpu.threshold")
 						cfp, err = NewArimaR(comp, interval, leadtime, history, threshold)
+						c.lastNodeCpuPoint = tsPoint
 						if err != nil {
 							log.Printf("cfp: %s. %s", comp.UniqName(), err)
 						}

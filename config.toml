@@ -28,11 +28,16 @@ title = "Hora configuration"
 		aggregationvalue = 95
 	[cfp.errorrate]
     [cfp.cpu]
-        threshold = 1000
+        threshold = 900
 		predictor = "arima"
         history = "20m"
 		aggregation = "percentile"
 		aggregationvalue = 95
+		limit = 1.0
+	[cfp.nodecpu]
+        threshold = 0.75
+        history = "20m"
+        limit = 4.0
     [cfp.memory]
       	threshold = 2000000000
 		predictor = "arima"

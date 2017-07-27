@@ -126,7 +126,7 @@ func (r *InfluxKiekerReader) startReading(mondatCh chan TSPoint) {
 	}
 MainLoop:
 	for {
-		log.Print("Reading monitoring data at ", curtime)
+		log.Print("Mondat: Reading monitoring data at ", curtime)
 		r.ArchdepmodMutex.Lock()
 	ComponentLoop:
 		for _, depInfo := range r.Archdepmod {
@@ -134,6 +134,7 @@ MainLoop:
 			var cmd string
 			var response *client.Response
 			var err error
+			log.Printf("mondat: Switch: %s", depInfo.Caller.Type) 
 			switch depInfo.Caller.Type {
 			case "responsetime":
 				aggregation := viper.GetString("cfp.responsetime.aggregation")
@@ -181,11 +182,14 @@ MainLoop:
 			case "cpu":
 				aggregation := viper.GetString("cfp.cpu.aggregation")
 				aggregationvalue := viper.GetString("cfp.cpu.aggregationvalue")
-				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/usage_rate\" WHERE \"pod_name\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.UnixNano(), 10), strconv.FormatInt(curtime.Add(1*r.Interval).UnixNano(), 10))
+				//cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/usage_rate\" WHERE \"pod_name\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.UnixNano(), 10), strconv.FormatInt(curtime.Add(1*r.Interval).UnixNano(), 10))
+				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/usage_rate\" WHERE \"pod_name\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.Add(-1*r.Interval).UnixNano(), 10), strconv.FormatInt(curtime.UnixNano(), 10))
+				log.Printf("mondat: CPU Query: %s", cmd) 
 				q = client.Query{
 					Command:  cmd,
 					Database: r.K8sDb.DbName,
 				}
+				log.Printf("Addr: %s, DbName: %s, Username: %s, Password: %s", r.K8sDb.Addr, r.K8sDb.DbName, r.K8sDb.Username, r.K8sDb.Password)
 				response, err = r.K8sDb.Clnt.Query(q)
 				if err != nil {
 					log.Printf("influxdb-kieker-reader: cannot query data with cmd=%s. %s", cmd, err)
@@ -202,7 +206,11 @@ MainLoop:
 				res := response.Results
 
 				if len(res[0].Series) == 0 {
+					log.Printf("CPU Query Count == 0! res len: %d", len(res))
 					continue ComponentLoop // no data - try next component
+				}
+				for _, row := range res[0].Series[0].Values {
+					log.Printf("data: %s", row[0].(string))
 				}
 				// Parse time and response time
 				for _, row := range res[0].Series[0].Values {
@@ -218,13 +226,14 @@ MainLoop:
 							Timestamp: t,
 							Value:     val,
 						}
+						log.Printf("CPU: channel point %d", point.Value)
 						mondatCh <- point
 					}
 				}
 			case "nodecpu":
 				aggregation := viper.GetString("cfp.cpu.aggregation")
 				aggregationvalue := viper.GetString("cfp.cpu.aggregationvalue")
-				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/node_utilization\" WHERE \"hostname\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.UnixNano(), 10), strconv.FormatInt(curtime.Add(1*r.Interval).UnixNano(), 10))
+				cmd = fmt.Sprintf("SELECT %s(value,%s) FROM \"cpu/node_utilization\" WHERE \"hostname\"='%s' AND time >= %s AND time < %s GROUP BY time(1m)", aggregation, aggregationvalue, depInfo.Caller.Hostname, strconv.FormatInt(curtime.Add(-1*r.Interval).UnixNano(), 10), strconv.FormatInt(curtime.UnixNano(), 10))
 				log.Printf("Query: %s", cmd)
 				q = client.Query{
 					Command:  cmd,
@@ -249,6 +258,7 @@ MainLoop:
 
 				if len(res[0].Series) == 0 {
 				log.Printf("No data for nodecpu (host: %s)", depInfo.Caller.Hostname)
+					log.Printf("NODECPU Query Count == 0! res len: %d", len(res))
 					continue ComponentLoop // no data - try next component
 				}
 				// Parse time and response time

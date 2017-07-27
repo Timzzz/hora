@@ -99,6 +99,7 @@ func main() {
 	go func() {
 		for {
 			cfpResult := <-cfpResultCh
+			log.Print("main: cfpResult: mean: %s, failprob: %s", cfpResult.PredMean, cfpResult.FailProb)
 			f.UpdateCfpResult(cfpResult)
 			evaluator.UpdateCfpResult(cfpResult)
 			resultWriter.WriteCfpResult(cfpResult)

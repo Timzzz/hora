@@ -101,8 +101,8 @@ func (a *ArimaR) Predict() (Result, error) {
 		0,
 		0,
 	}
-	if a.bufcount < a.buf.Len() {
-		log.Printf("arima: not enough data points (%d to %d).", a.bufcount, a.buf.Len)
+	if a.bufcount < 2 {//a.buf.Len() {
+		log.Print("arima: not enough data points (%d to %d).", a.bufcount, a.buf.Len)
 		return result, nil
 	}
 	// load data

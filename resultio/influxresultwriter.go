@@ -52,6 +52,7 @@ func (w *InfluxResultWriter) createDB(db string) error {
 }
 
 func (w *InfluxResultWriter) WriteCfpResult(result cfp.Result) error {
+	log.Print("resutio: write: mean: %s, failprob: %s", result.PredMean, result.FailProb)
 	// Create a new point batch
 	bp, err := client.NewBatchPoints(client.BatchPointsConfig{
 		Database:  "hora",
